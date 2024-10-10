@@ -44,10 +44,10 @@ export default function HomeClient({ allEvents }: { allEvents: Event[][] }) {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-top p-24">
-      <div className="w-full flex justify-between mb-4">
+    <main className="flex flex-col items-center justify-top p-24 min-h-screen">
+      <div className="w-full flex justify-between">
         <div>Round: {currentRound}/5</div>
-        <CountDown initialTime={30} onTimeUp={handleTimeUp} />
+        <CountDown initialTime={60} onTimeUp={handleTimeUp} />
       </div>
       <h1 className="text-4xl font-bold mb-8">TimeChain</h1>
       <GameControls />

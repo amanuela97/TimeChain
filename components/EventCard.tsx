@@ -20,7 +20,7 @@ export default function EventCard({
   const isLongText = event.event.length > 296;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: event.year });
+    useSortable({ id: event.year, disabled: isScoreView });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -42,11 +42,10 @@ export default function EventCard({
       <div
         ref={setNodeRef}
         style={style}
-        {...attributes}
-        {...listeners}
+        {...(isScoreView ? {} : { ...attributes, ...listeners })}
         className={`w-full h-full rounded-lg shadow-md flex flex-col justify-between items-center text-white p-2 bg-white ${
           isDragging ? "border-4 border-blue-500" : ""
-        }`}
+        } ${isScoreView ? "border-4 border-green-500" : ""}`}
       >
         <div className="text-center bg-black bg-opacity-70 p-2 rounded w-full h-full overflow-hidden">
           <p className="font-bold mb-1 text-sm line-clamp-[11]">
@@ -55,7 +54,7 @@ export default function EventCard({
           <p className="text-xs mt-1">{event.timeZone}</p>
         </div>
       </div>
-      {isLongText && !isHidden && (
+      {isLongText && !isHidden && !isScoreView && (
         <button
           onClick={handleReadMoreClick}
           className="absolute bottom-0 left-0 right-0 text-xs bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded-b"

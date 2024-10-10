@@ -85,44 +85,46 @@ export default function GameControls({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={items.map((item) => item.year)}
-        strategy={rectSortingStrategy}
-      >
-        <div className="relative flex flex-col items-center w-full max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-6 p-4 rounded-lg w-full border-2 border-blue-500 bg-black">
-            {items.map((event) => (
-              <EventCard
-                key={event.year}
-                event={event}
-                isHidden={event.year === activeId}
-                isScoreView={isScoreView}
-              />
-            ))}
-          </div>
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-6 mt-2 w-full">
-            {sortedYears.map((year) => (
-              <div
-                key={year}
-                className="w-full lg:w-56 text-center bg-black p-2"
-              >
-                <span className="text-lg font-bold text-white">{year}</span>
-              </div>
-            ))}
-          </div>
+    <div className="relative flex flex-col items-center w-full max-w-7xl mx-auto">
+      {isScoreView ? (
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 p-4 rounded-lg w-full border-2 border-white bg-black">
+          {items.map((event) => (
+            <EventCard key={event.year} event={event} isScoreView={true} />
+          ))}
         </div>
-      </SortableContext>
-      {!isScoreView && (
-        <DragOverlay>
-          {activeEvent ? <EventCard event={activeEvent} isDragging /> : null}
-        </DragOverlay>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={items.map((item) => item.year)}
+            strategy={rectSortingStrategy}
+          >
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-6 p-4 rounded-lg w-full border-2 border-blue-500 bg-black">
+              {items.map((event) => (
+                <EventCard
+                  key={event.year}
+                  event={event}
+                  isHidden={event.year === activeId}
+                />
+              ))}
+            </div>
+          </SortableContext>
+          <DragOverlay>
+            {activeEvent ? <EventCard event={activeEvent} isDragging /> : null}
+          </DragOverlay>
+        </DndContext>
       )}
-    </DndContext>
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-6 mt-2 w-full">
+        {sortedYears.map((year) => (
+          <div key={year} className="w-full lg:w-56 text-center bg-black p-2">
+            <span className="text-lg font-bold text-white">{year}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

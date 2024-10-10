@@ -14,8 +14,8 @@ export default function FinalScore() {
   }, [roundScore, setFinalScore]);
 
   const handlePlayAgain = () => {
-    resetGame();
     router.push("/");
+    resetGame();
   };
 
   return (

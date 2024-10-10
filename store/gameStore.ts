@@ -28,7 +28,7 @@ export const useGameStore = create<GameState>((set) => ({
   correctOrder: [],
   currentRound: 1,
   setEvents: (events) => set({ events }),
-  setAllEvents: (allEvents) => set({ allEvents }),
+  setAllEvents: (allEvents) => set({ allEvents, events: allEvents[0] || [] }),
   setRoundScore: (score) =>
     set((state) => ({ roundScore: [...state.roundScore, score] })),
   setFinalScore: (score) => set({ finalScore: score }),
@@ -41,10 +41,19 @@ export const useGameStore = create<GameState>((set) => ({
     }),
   setCorrectOrder: (order) => set({ correctOrder: order }),
   incrementRound: () =>
-    set((state) => ({
-      currentRound: state.currentRound + 1,
-      events: state.allEvents[state.currentRound] || [],
-    })),
+    set((state) => {
+      const nextRound = state.currentRound + 1;
+      return {
+        currentRound: nextRound,
+        events: state.allEvents[nextRound - 1] || [],
+      };
+    }),
   resetGame: () =>
-    set({ roundScore: [], finalScore: 0, guessOrder: [], currentRound: 1 }),
+    set((state) => ({
+      roundScore: [],
+      finalScore: 0,
+      guessOrder: [],
+      currentRound: 1,
+      events: state.allEvents[0] || [],
+    })),
 }));

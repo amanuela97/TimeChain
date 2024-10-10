@@ -11,10 +11,11 @@ export default function RoundScore() {
     useGameStore();
 
   useEffect(() => {
-    const correctOrder = [...allEvents[currentRound - 1]]
+    const currentEvents = allEvents[currentRound - 1] || [];
+    const correctOrder = [...currentEvents]
       .sort((a, b) => a.year - b.year)
       .map((event) => event.year);
-    const lastGuessOrder = guessOrder[guessOrder.length - 1];
+    const lastGuessOrder = guessOrder[guessOrder.length - 1] || [];
 
     let score = 0;
     for (let i = 0; i < correctOrder.length; i++) {
@@ -36,12 +37,12 @@ export default function RoundScore() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-top p-24 min-h-screen">
       <h1 className="text-4xl font-bold mb-8">Round {currentRound} Score</h1>
       <GameControls isScoreView={true} />
       <p className="text-2xl mt-8">
         Your score for this round:{" "}
-        {useGameStore.getState().roundScore[currentRound - 1]}
+        {useGameStore.getState().roundScore[currentRound - 1] || 0}
       </p>
       <button
         onClick={handleNextRound}
