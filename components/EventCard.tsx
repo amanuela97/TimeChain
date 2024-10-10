@@ -7,12 +7,14 @@ interface EventCardProps {
   event: Event;
   isHidden?: boolean;
   isDragging?: boolean;
+  isScoreView?: boolean;
 }
 
 export default function EventCard({
   event,
   isHidden,
   isDragging,
+  isScoreView,
 }: EventCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isLongText = event.event.length > 296;
@@ -36,7 +38,7 @@ export default function EventCard({
   };
 
   return (
-    <div className="w-full lg:w-56 h-72">
+    <div className="w-full lg:w-56 h-72 relative">
       <div
         ref={setNodeRef}
         style={style}
@@ -56,7 +58,7 @@ export default function EventCard({
       {isLongText && !isHidden && (
         <button
           onClick={handleReadMoreClick}
-          className="absolute bottom-2 left-2 right-2 text-xs bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded"
+          className="absolute bottom-0 left-0 right-0 text-xs bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded-b"
         >
           Read More
         </button>

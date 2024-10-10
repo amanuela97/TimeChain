@@ -1,14 +1,16 @@
-- use shadcn, zustand and dnd-kit to implement the following
-- I want to implement a game called TimeChain
-- In TimeChain, players are presented with a "chain" of historical events or inventions, and the objective is to correctly arrange them in chronological order. Think of it as a visual and interactive timeline-building game.
-- store the json data fetched in the root page in a global store like zustand
-- exaple of the event data returned [{
-  year: randomYear,
-  event: randomEvent.content,
-  imageUrl: imageUrl,
-  timeZone: timeZone,
-  difficulty: difficulty,
-  }]
-- Then use the array of events and display a horizontally aligned cards that can be rearranged by dragging
-- Make the imageUrl fit the card like a background and display the text of event, and timezone on top of the image centered in white text.
-- add a border and a border color to the card that is being dragged and make the droppable array background color change when the card is dragged
+- using the <GameControls/> component, create a game with five rounds
+- In each round, at the top left corner of the page show a text that shows the player the current game round "1/5" like so.
+- Additionally, keep store of the roundScore and display it at the top right corner of the page after each round of the game.
+- When each round starts, there should be a countDown component that counts down the time the player has to arrange the cards correctly, this time should be "30 seconds", so sarting from 30 to 0.
+-
+- In each round of the game, a player is shown a page with the <GameControls/> and a player has to move the event cards to match with the year displayed at the bottom.
+- Once they have arranged the cards in the order they think is correct, they will click on a button that says "lock In"
+- When the "lock In" button is clicked, they will be redirected to /roundscore page
+- In /roundscore page they will be shown <GameControls/> with the right order of the event cards to the year from oldest to latest year.
+- In /roundscore page they will also be shown how much score they got for that specific round
+- There five cards to arrange so players will be awarded 200 points for each year they matched to the event card but they also get 0 to 100 point for how quickly they lock in their answer in the 30 seconds game time window.
+- Lastly, when it is the last round, instead of a "Lock In" button, there will be a "Final Score" button.
+- When the "Final Score" button is clicked, they will be redirected to /finalscore page where they are shown the finalScore which is the sum of the score from each roundScore.
+- On the /finalscore page, there should also be a button that says "play again"
+- if the "Play Again" button is clicked, the game is reset and a new round will be started again.
+- For the game you should keep a global state of the roundScore, finalScore, guessOrder for each round, and the correctOrder of the cards.

@@ -20,7 +20,13 @@ import {
 } from "@dnd-kit/sortable";
 import EventCard from "./EventCard";
 
-export default function GameControls() {
+interface GameControlsProps {
+  isScoreView?: boolean;
+}
+
+export default function GameControls({
+  isScoreView = false,
+}: GameControlsProps) {
   const events = useGameStore((state) => state.events);
   const [items, setItems] = useState(events);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -29,10 +35,14 @@ export default function GameControls() {
     : null;
 
   useEffect(() => {
-    setItems(events);
-  }, [events]);
+    if (isScoreView) {
+      const sortedEvents = [...events].sort((a, b) => a.year - b.year);
+      setItems(sortedEvents);
+    } else {
+      setItems(events);
+    }
+  }, [events, isScoreView]);
 
-  // Sort years separately
   const sortedYears = [...events]
     .sort((a, b) => a.year - b.year)
     .map((event) => event.year);
@@ -45,21 +55,25 @@ export default function GameControls() {
   );
 
   function handleDragStart(event: DragStartEvent) {
-    setActiveId(event.active.id);
+    if (!isScoreView) {
+      setActiveId(event.active.id);
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
+    if (!isScoreView) {
+      const { active, over } = event;
 
-    if (active && over && active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.year === active.id);
-        const newIndex = items.findIndex((item) => item.year === over.id);
+      if (active && over && active.id !== over.id) {
+        setItems((items) => {
+          const oldIndex = items.findIndex((item) => item.year === active.id);
+          const newIndex = items.findIndex((item) => item.year === over.id);
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
+          return arrayMove(items, oldIndex, newIndex);
+        });
+      }
+      setActiveId(null);
     }
-    setActiveId(null);
   }
 
   if (items.length === 0) {
@@ -88,6 +102,7 @@ export default function GameControls() {
                 key={event.year}
                 event={event}
                 isHidden={event.year === activeId}
+                isScoreView={isScoreView}
               />
             ))}
           </div>
@@ -103,9 +118,11 @@ export default function GameControls() {
           </div>
         </div>
       </SortableContext>
-      <DragOverlay>
-        {activeEvent ? <EventCard event={activeEvent} isDragging /> : null}
-      </DragOverlay>
+      {!isScoreView && (
+        <DragOverlay>
+          {activeEvent ? <EventCard event={activeEvent} isDragging /> : null}
+        </DragOverlay>
+      )}
     </DndContext>
   );
 }
